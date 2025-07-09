@@ -293,14 +293,10 @@ clean_intel_installation() {
 
     base_paths="/opt/intel/oneapi $HOME/intel/oneapi /usr/local/intel/oneapi"
 
-    if command -v icx >/dev/null 2>&1 || command -v icc >/dev/null 2>&1; then
-        log_success "Intel compilers found in PATH"
-        return 0
-    fi
 
     log_warning "Intel oneAPI Base Kit not found"
     echo "Searching for old Intel residual installations..."
-    # Remove installer caches
+    
     echo "Removing installer cache folders..."
 
     sudo rm -rf /var/intel/installercache
