@@ -293,16 +293,6 @@ clean_intel_installation() {
 
     base_paths="/opt/intel/oneapi $HOME/intel/oneapi /usr/local/intel/oneapi"
 
-    for path in $base_paths; do
-        if [ -d "$path" ] && [ -f "$path/setvars.sh" ]; then
-            if [ -f "$path/compiler/latest/env/vars.sh" ]; then
-                log_success "Intel oneAPI Base Kit found at: $path"
-                export ONEAPI_BASE_PATH="$path"
-                return 0
-            fi
-        fi
-    done
-
     if command -v icx >/dev/null 2>&1 || command -v icc >/dev/null 2>&1; then
         log_success "Intel compilers found in PATH"
         return 0
