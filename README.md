@@ -72,6 +72,16 @@ This script performs the following:
 
    *(Do not run as root; sudo will be prompted when required for system-wide operations.)*
 
+ ## Or just copy and paste
+
+   ```bash
+   wget https://raw.githubusercontent.com/shahariarchowdhory/vasp_auto_installer/refs/heads/main/vasp_auto_installer.sh -O vasp_auto_installer.sh
+   chmod +x vasp_auto_installer.sh
+   ./vasp_auto_installer.sh
+   ```
+  
+
+
 ## ⚙️ Installation Options
 
 The script will present an interactive menu:
