@@ -49,16 +49,16 @@ This script performs the following:
 1. **Download:**
 
    
-bash
-   wget https://raw.githubusercontent.com/shahariarchowdhory/vasp-install-script/main/vasp_auto_installer.sh -O vasp_auto_installer.sh
-
+```bash
+   wget https://raw.githubusercontent.com/shahariarchowdhory/vasp_auto_installer/refs/heads/main/vasp_auto_installer.sh -O vasp_auto_installer.sh
+```
 
 2. **Make Executable:**
 
    
-bash
+```bash
    chmod +x vasp_auto_installer.sh
-
+```
 ## 🚀 Usage
 
 1. **Place Archives:** Ensure VASP source and POTCAR archives are in your $HOME directory.
@@ -66,9 +66,9 @@ bash
 2. **Run Script:**
 
    
-bash
+```bash
    ./install_vasp.sh
-
+```
 
    *(Do not run as root; sudo will be prompted when required for system-wide operations.)*
 
