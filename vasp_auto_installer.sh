@@ -592,9 +592,7 @@ install_vaspkit() {
     success=0
     
     while [ $success -eq 0 ]; do
-
         decompress_error=0
-
         if [ -f "vaspkit.zip" ]; then
             unzip -q vaspkit.zip || decompress_error=1
         elif [ -f "vaspkit.tar.gz" ]; then
@@ -603,17 +601,17 @@ install_vaspkit() {
             log_error "No VASPKit archive found."
             decompress_error=1
         fi
-
+        
         if [ "$decompress_error" == "1" ]; then
             log_error "Failed to decompress VASPKit archive. The file may be corrupted."
-
+            
             echo "Choose an option:"
             echo "1) Redownload automatically"
             echo "2) Manually place archive and retry"
             echo "3) Cancel installation"
-
+            
             read -rp "Enter your choice [1/2/3]: " choice
-
+            
             case $choice in
                 1)
                     rm -f vaspkit.zip vaspkit.tar.gz
@@ -642,7 +640,6 @@ install_vaspkit() {
         fi
     done
 
-
     vaspkit_dir=$(find . -maxdepth 3 \
         \( -type f -name "vaspkit" -executable \) \
         -exec dirname {} \; | head -1)
@@ -652,23 +649,22 @@ install_vaspkit() {
         exit 1
     fi
 
-
     vaspkit_root=$(cd "$vaspkit_dir" && pwd)
 
-
+    mkdir -p "$HOME/vaspkit"
+    
     if [ "$vaspkit_root" != "$HOME/vaspkit" ]; then
-        mv "$vaspkit_root"/* "$HOME/vaspkit"
+        cp -r "$vaspkit_root"/* "$HOME/vaspkit/"
+        rm -rf "$vaspkit_root"
     fi
 
     mkdir -p "$HOME/bin"
     ln -sf "$HOME/vaspkit/vaspkit" "$HOME/bin/vaspkit"
 
     setup_vaspkit_config
-    
+
     log_success "VASPKit installed successfully"
 }
-
-
 
 setup_vaspkit_config() {
     log "Setting up VASPKit configuration..."
@@ -706,6 +702,8 @@ EOF
         echo "" >> "$bashrc"
         echo "$vaspkit_env" >> "$bashrc"
     fi
+    
+    source "$HOME/.bashrc" 2>/dev/null || true
     
     log_success "VASPKit configuration completed"
 }
