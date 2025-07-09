@@ -67,7 +67,7 @@ This script performs the following:
 
    
 ```bash
-   ./install_vasp.sh
+   ./vasp_auto_installer.sh
 ```
 
    *(Do not run as root; sudo will be prompted when required for system-wide operations.)*
