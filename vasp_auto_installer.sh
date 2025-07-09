@@ -125,15 +125,27 @@ check_file_status() {
     fi
     
 
-    if [ -f "base.sh" ]; then
-        echo -e "   ${GREEN}* Intel Base Kit installer found:${NC} base.sh"
+    base_found=""
+    for file in $(find . -maxdepth 1 \( -name "*base*" -o -name "*toolkit*" \) -name "*.sh" 2>/dev/null); do
+        base_found="$file"
+        break
+    done
+    
+    if [ -n "$base_found" ]; then
+        echo -e "   ${GREEN}* Intel Base Kit installer found:${NC} $base_found"
     else
         echo -e "   ${YELLOW}* Intel Base Kit installer:${NC} Will be downloaded"
     fi
     
 
-    if [ -f "hpc.sh" ]; then
-        echo -e "   ${GREEN}* Intel HPC Kit installer found:${NC} hpc.sh"
+    hpc_found=""
+    for file in $(find . -maxdepth 1 \( -name "*hpc*" -o -name "*fortran*" \) -name "*.sh" 2>/dev/null); do
+        hpc_found="$file"
+        break
+    done
+    
+    if [ -n "$hpc_found" ]; then
+        echo -e "   ${GREEN}* Intel HPC Kit installer found:${NC} $hpc_found"
     else
         echo -e "   ${YELLOW}* Intel HPC Kit installer:${NC} Will be downloaded"
     fi
@@ -289,16 +301,19 @@ confirm_reinstall() {
 }
 
 clean_intel_installation() {
-    log "Checking for Intel oneAPI Base Kit..."
+    log "Cleaning Intel OneAPI installations..."
 
     base_paths="/opt/intel/oneapi $HOME/intel/oneapi /usr/local/intel/oneapi"
+    hpc_paths="/opt/intel/oneapi $HOME/intel/oneapi /usr/local/intel/oneapi"
 
+    for path in $base_paths $hpc_paths; do
+        if [ -d "$path" ]; then
+            log "Removing Intel installation at: $path"
+            sudo rm -rf "$path" 2>/dev/null || rm -rf "$path" 2>/dev/null
+        fi
+    done
 
-    log_warning "Intel oneAPI Base Kit not found"
-    echo "Searching for old Intel residual installations..."
-    
-    echo "Removing installer cache folders..."
-
+    log "Removing installer cache folders..."
     sudo rm -rf /var/intel/installercache
     sudo rm -rf /opt/intel/installer
     sudo rm -rf /opt/intel
@@ -306,15 +321,13 @@ clean_intel_installation() {
     sudo rm -rf /usr/intel
     sudo rm -rf /var/log/intel
     sudo rm -rf $HOME/intel
-    # Remove hidden config files in user home
-    echo "Removing hidden Intel config folders..."
 
+    log "Removing hidden Intel config folders..."
     rm -rf ~/.config/intel
     rm -rf ~/.intel
 
-    echo "Intel cleanup complete!"
+    log_success "Intel cleanup complete!"
 }
-
 
 clean_vaspkit_installation() {
     log "Cleaning existing VASPKit installation. This should be very quick, typically less than a few seconds."
@@ -377,18 +390,14 @@ find_or_download_intel() {
     base_found=""
     hpc_found=""
     
-    for file in $(find . -maxdepth 1 -name "*base*" -name "*.sh" 2>/dev/null); do
-        if [[ "$file" =~ (base|toolkit) ]]; then
-            base_found="$file"
-            break
-        fi
+    for file in $(find . -maxdepth 1 \( -name "*base*" -o -name "*toolkit*" \) -name "*.sh" 2>/dev/null); do
+        base_found="$file"
+        break
     done
     
-    for file in $(find . -maxdepth 1 -name "*hpc*" -name "*.sh" 2>/dev/null); do
-        if [[ "$file" =~ (hpc|fortran) ]]; then
-            hpc_found="$file"
-            break
-        fi
+    for file in $(find . -maxdepth 1 \( -name "*hpc*" -o -name "*fortran*" \) -name "*.sh" 2>/dev/null); do
+        hpc_found="$file"
+        break
     done
     
     if [ -n "$base_found" ] && [ "$base_found" != "./base.sh" ]; then
@@ -403,7 +412,7 @@ find_or_download_intel() {
     
     if [ ! -f "base.sh" ]; then
         log "Downloading Intel Base Kit..."
-        wget -O base.sh "https://archive.org/download/base_2023/base.sh" || {
+        wget -O base.sh "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/9a98af19-1c68-46ce-9fdd-e249240c7c42/l_BaseKit_p_2024.2.0.634_offline.sh" || {
             log_error "Failed to download Base Kit installer"
             exit 1
         }
@@ -411,7 +420,7 @@ find_or_download_intel() {
     
     if [ ! -f "hpc.sh" ]; then
         log "Downloading Intel HPC Kit..."
-        wget -O hpc.sh "https://archive.org/download/hpc_2023/hpc.sh" || {
+        wget -O hpc.sh "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/a66f4bd4-d3b7-4dc2-8a7e-c5ccf7d6dfd7/l_HPCKit_p_2024.2.0.635_offline.sh" || {
             log_error "Failed to download HPC Kit installer"
             exit 1
         }
@@ -422,6 +431,10 @@ find_or_download_intel() {
 }
 
 check_base_kit() {
+    if command -v icx >/dev/null 2>&1 || command -v icc >/dev/null 2>&1; then
+        return 0
+    fi
+    
     local base_paths="/opt/intel/oneapi $HOME/intel/oneapi /usr/local/intel/oneapi"
     
     for path in $base_paths; do
@@ -431,22 +444,18 @@ check_base_kit() {
         fi
     done
     
-    if command -v icx >/dev/null 2>&1 || command -v icc >/dev/null 2>&1; then
-        return 0
-    fi
-    
     return 1
 }
 
 check_hpc_kit() {
-    if command -v ifort >/dev/null 2>&1 || command -v ifx >/dev/null 2>&1; then
+    if command -v ifort >/dev/null 2>&1 || command -v ifx >/dev/null 2>&1 || command -v fpp >/dev/null 2>&1; then
         return 0
     fi
     
     local hpc_paths="/opt/intel/oneapi $HOME/intel/oneapi /usr/local/intel/oneapi"
     
     for path in $hpc_paths; do
-        if [ -f "$path/mpi/latest/env/vars.sh" ]; then
+        if [ -f "$path/mpi/latest/env/vars.sh" ] || [ -f "$path/compiler/latest/env/vars.sh" ]; then
             export ONEAPI_HPC_PATH="$path"
             return 0
         fi
@@ -458,52 +467,155 @@ check_hpc_kit() {
 install_intel_kits() {
     log "Installing Intel OneAPI kits. It should take around 10-20 minutes depending on your internet speed and system performance."
     sleep 2
-    install_dir="$HOME/intel/oneapi"
-    mkdir -p "$install_dir"
 
-    cd "$HOME"
-    
+    cd "$HOME" || exit 1
+
     if ! check_base_kit; then
-        log "Installing Intel Base Kit..."
+        hpc_success=0
 
-        if sudo ./base.sh -a --silent --eula accept --install-dir "$install_dir"; then
-            log_success "Intel oneAPI Base Kit installed successfully."
-            export ONEAPI_BASE_PATH="$install_dir"
-        else
-            log_error "Base Kit installation failed or already installed."
-            #exit 1
-        fi
+        while [ $hpc_success -eq 0 ]; do
+            hpc_error=0
 
-        if sudo ./hpc.sh -a --silent --eula accept --install-dir "$install_dir"; then
-            log_success "Intel oneAPI HPC Kit installed successfully."
-            export ONEAPI_HPC_PATH="$install_dir"
-        else
-            log_error "HPC Kit installation failed or already installed."
-            #exit 1
-        fi
+            if [ ! -f "hpc.sh" ]; then
+                log_error "HPC installer (hpc.sh) not found."
+                hpc_error=1
+            else
+                chmod +x hpc.sh || hpc_error=1
+
+                if [ $hpc_error -eq 0 ]; then
+                    log "Installing Intel HPC Kit..."
+                    if sudo ./hpc.sh -a --silent --eula accept; then
+                        log_success "Intel oneAPI HPC Kit installed successfully."
+                        hpc_success=1
+                    else
+                        log_error "HPC Kit installation failed or the archive is corrupted."
+                        hpc_error=1
+                    fi
+                fi
+            fi
+
+            if [ $hpc_error -eq 1 ]; then
+                echo "Choose an option:"
+                echo "1) Redownload HPC Kit automatically"
+                echo "2) Manually place hpc.sh and retry"
+                echo "3) Skip HPC Kit installation"
+                echo "4) Cancel installation"
+
+                read -rp "Enter your choice [1/2/3/4]: " choice
+
+                case $choice in
+                    1)
+                        rm -f hpc.sh
+                        find_or_download_intel_hpc
+                        ;;
+                    2)
+                        echo "Please place the correct hpc.sh in your home directory and press Enter to continue."
+                        read -r
+                        ;;
+                    3)
+                        log "Skipping HPC Kit installation."
+                        hpc_success=1
+                        ;;
+                    4)
+                        log_error "Installation cancelled by user."
+                        exit 1
+                        ;;
+                    *)
+                        echo "Invalid choice. Please try again."
+                        ;;
+                esac
+            fi
+        done
+
+        base_success=0
+
+        while [ $base_success -eq 0 ]; do
+            base_error=0
+
+            if [ ! -f "base.sh" ]; then
+                log_error "Base installer (base.sh) not found."
+                base_error=1
+            else
+                chmod +x base.sh || base_error=1
+
+                if [ $base_error -eq 0 ]; then
+                    log "Installing Intel Base Kit..."
+                    if sudo ./base.sh -a --silent --eula accept; then
+                        log_success "Intel oneAPI Base Kit installed successfully."
+                        base_success=1
+                    else
+                        log_error "Base Kit installation failed or the archive is corrupted."
+                        base_error=1
+                    fi
+                fi
+            fi
+
+            if [ $base_error -eq 1 ]; then
+                echo "Choose an option:"
+                echo "1) Redownload Base Kit automatically"
+                echo "2) Manually place base.sh and retry"
+                echo "3) Skip Base Kit installation"
+                echo "4) Cancel installation"
+
+                read -rp "Enter your choice [1/2/3/4]: " choice
+
+                case $choice in
+                    1)
+                        rm -f base.sh
+                        find_or_download_intel_base
+                        ;;
+                    2)
+                        echo "Please place the correct base.sh in your home directory and press Enter to continue."
+                        read -r
+                        ;;
+                    3)
+                        log "Skipping Base Kit installation."
+                        base_success=1
+                        ;;
+                    4)
+                        log_error "Installation cancelled by user."
+                        exit 1
+                        ;;
+                    *)
+                        echo "Invalid choice. Please try again."
+                        ;;
+                esac
+            fi
+        done
     fi
-    
+
     source_intel_env
 }
+
 
 source_intel_env() {
     log "Setting up Intel oneAPI environment..."
 
-    oneapi_path=""
-    search_paths="/opt/intel/oneapi $HOME/intel/oneapi $ONEAPI_BASE_PATH $ONEAPI_HPC_PATH"
+    base_path=""
+    hpc_path=""
+    
+    search_paths="/opt/intel/oneapi $HOME/intel/oneapi /usr/local/intel/oneapi"
 
     for path in $search_paths; do
         if [ -n "$path" ] && [ -d "$path" ] && [ -f "$path/setvars.sh" ]; then
-            oneapi_path="$path"
-            break
+            if [ -f "$path/compiler/latest/env/vars.sh" ]; then
+                if [ -z "$base_path" ]; then
+                    base_path="$path"
+                fi
+                if [ -f "$path/mpi/latest/env/vars.sh" ] && [ -z "$hpc_path" ]; then
+                    hpc_path="$path"
+                fi
+            fi
         fi
     done
 
-    if [ -z "$oneapi_path" ]; then
+    if [ -z "$base_path" ] && [ -z "$hpc_path" ]; then
         log_error "Cannot find Intel oneAPI installation"
         exit 1
     fi
 
+    oneapi_path="${base_path:-$hpc_path}"
+    
     log "Sourcing Intel oneAPI environment from: $oneapi_path"
     if . "$oneapi_path/setvars.sh" --force; then
         log_success "Intel oneAPI environment loaded successfully"
