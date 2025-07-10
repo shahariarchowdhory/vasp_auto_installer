@@ -69,8 +69,8 @@ show_instructions() {
     slow_echo "     - VASPKit archive (vaspkit.zip or vaspkit.tar.gz)"
     slow_echo ""
     slow_echo "${BOLD}Auto-downloaded files:${NC}"
-    slow_echo "   - Intel Base Kit: ${CYAN}https://archive.org/download/base_2023/base.sh${NC}"
-    slow_echo "   - Intel HPC Kit: ${CYAN}https://archive.org/download/hpc_2023/hpc.sh${NC}"
+    slow_echo "   - Intel Base Kit: ${CYAN}From Intel Servers${NC}"
+    slow_echo "   - Intel HPC Kit: ${CYAN}From Intel Servers${NC}"
     slow_echo "   - VASPKit: ${CYAN}https://archive.org/download/vaspkit151.tar/vaspkit.1.5.1.linux.x64.tar.gz${NC}"
     slow_echo ""
     slow_echo "${BOLD}Current status of files in $HOME:${NC}"
@@ -412,7 +412,7 @@ find_or_download_intel() {
     
     if [ ! -f "base.sh" ]; then
         log "Downloading Intel Base Kit..."
-        wget -O base.sh "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/9a98af19-1c68-46ce-9fdd-e249240c7c42/l_BaseKit_p_2024.2.0.634_offline.sh" || {
+        wget -O base.sh "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/bd1d0273-a931-4f7e-ab76-6a2a67d646c7/intel-oneapi-base-toolkit-2025.2.0.592_offline.sh" || {
             log_error "Failed to download Base Kit installer"
             exit 1
         }
@@ -420,7 +420,7 @@ find_or_download_intel() {
     
     if [ ! -f "hpc.sh" ]; then
         log "Downloading Intel HPC Kit..."
-        wget -O hpc.sh "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/a66f4bd4-d3b7-4dc2-8a7e-c5ccf7d6dfd7/l_HPCKit_p_2024.2.0.635_offline.sh" || {
+        wget -O hpc.sh "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/e974de81-57b7-4ac1-b039-0512f8df974e/intel-oneapi-hpc-toolkit-2025.2.0.575_offline.sh" || {
             log_error "Failed to download HPC Kit installer"
             exit 1
         }
