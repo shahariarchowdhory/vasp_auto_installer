@@ -4,6 +4,19 @@
 
 This script automates the installation of VASP, Intel OneAPI (Base Kit + HPC Kit), and VASPKit. It handles dependency resolution, package downloads, VASP compilation with Intel compilers, and environment configuration.
 
+**TL;DR** - Just copy, paste, and run:
+
+```bash
+wget https://raw.githubusercontent.com/shahariarchowdhory/vasp_auto_installer/refs/heads/main/vasp_auto_installer.sh -O vasp_auto_installer.sh
+chmod +x vasp_auto_installer.sh
+./vasp_auto_installer.sh
+```
+
+✅ Make sure VASP source (Vasp.6.X.X.zip or Vasp.6.X.X.tar.gz) and POTCAR (potcar.zip or potcar.tar.gz) archives are in your $HOME directory.
+🧠 The script will guide you through Intel OneAPI, VASP, and VASPKit installation via a menu.
+⚠️ Don't run it as root - it'll ask for sudo only when needed.
+⭐ Don't forget to star if it helped you!
+
 ## ✨ Functionality
 
 This script performs the following:
