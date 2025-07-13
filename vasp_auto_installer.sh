@@ -48,7 +48,7 @@ display_header() {
     slow_echo ""
 
     slow_echo "${BOLD}${BLUE}============================================${NC}"
-    slow_echo "${BOLD}${BLUE}        VASP Installation Script v1.0       ${NC}"
+    slow_echo "${BOLD}${BLUE}        VASP Installation Script v1.1       ${NC}"
     slow_echo "${BOLD}${BLUE}============================================${NC}"
     slow_echo "${CYAN}Developer: ${GREEN}Shahariar Chowdhory${NC}"
     slow_echo "${CYAN}GitHub:    ${GREEN}https://github.com/shahariarchowdhory${NC}"
@@ -72,7 +72,7 @@ show_instructions() {
     slow_echo "${BOLD}Files to place in $HOME directory:${NC}"
     slow_echo "   ${RED}* Required files you MUST provide:${NC}"
     slow_echo "     - VASP source archive (vasp.*.tar.gz or vasp.*.zip)"
-    slow_echo "     - POTCAR archive (potcar.tar.gz or potcar.zip)"
+    slow_echo "     - POTCAR archive (potcar.tar.gz or potcar.zip or pot.tar.gz or pot.zip)"
     slow_echo ""
     slow_echo "   ${YELLOW}Optional files (will be downloaded if not found):${NC}"
     slow_echo "     - Intel Base Kit installer (base.sh)"
@@ -117,7 +117,7 @@ check_file_status() {
     
 
     potcar_found=""
-    for file in $(find . -maxdepth 1 \( -name "*potcar*" -o -name "*POTCAR*" \) \( -name "*.tar.gz" -o -name "*.tgz" -o -name "*.zip" \) 2>/dev/null); do
+    for file in $(find . -maxdepth 1 \( -name "*potcar*" -o -name "*POTCAR*" -o -name "pot.*" -o -name "POT.*" \) \( -name "*.tar.gz" -o -name "*.tgz" -o -name "*.zip" \) 2>/dev/null); do
         potcar_found="$file"
         break
     done
@@ -126,7 +126,7 @@ check_file_status() {
         echo -e "   ${GREEN}* POTCAR archive found:${NC} $potcar_found"
     else
         echo -e "   ${RED}* POTCAR archive:${NC} NOT FOUND (Required)"
-        echo -e "   ${YELLOW}* Please place potcar.tar.gz or potcar.zip in $HOME${NC}"
+        echo -e "   ${YELLOW}* Please place potcar.tar.gz or potcar.zip or pot.tar.gz or pot.zip in $HOME${NC}"
         echo -e "   ${YELLOW}* This file are not provided by this script due to licensing restrictions.${NC}"
         echo -e "   ${YELLOW}* You can download it from VASP official site or your institution's repository.${NC}"
         echo -e "   ${YELLOW}* Without this file, VASP will not work properly and VASPkit will not be able to find pseudopotentials.${NC}"
@@ -822,13 +822,13 @@ setup_potcar() {
     cd "$HOME"
     
     potcar_archive=""
-    for file in $(find . -maxdepth 1 \( -name "*potcar*" -o -name "*POTCAR*" \) \( -name "*.tar.gz" -o -name "*.tgz" -o -name "*.zip" \) 2>/dev/null); do
+    for file in $(find . -maxdepth 1 \( -name "*potcar*" -o -name "*POTCAR*" -o -name "pot.*" -o -name "POT.*" \) \( -name "*.tar.gz" -o -name "*.tgz" -o -name "*.zip" \) 2>/dev/null); do
         potcar_archive="$file"
         break
     done
     
     if [ -z "$potcar_archive" ]; then
-        log_error "No POTCAR archive found. Please place potcar.tar.gz in $HOME"
+        log_error "No POTCAR archive found. Please place potcar.tar.gz or pot.tar.gz in $HOME"
         exit 1
     fi
     
@@ -839,11 +839,29 @@ setup_potcar() {
     mkdir -p potcar
     
     case "$potcar_archive" in
+        *pot.zip)
+            unzip -q "$potcar_archive"
+            ;;
+        *pot.tar.gz|*pot.tgz)
+            tar -xzf "$potcar_archive"
+            ;;
         *.zip)
             unzip -q "$potcar_archive" -d potcar
             ;;
         *.tar.gz|*.tgz)
             tar -xzf "$potcar_archive" -C potcar
+            ;;
+    esac
+    
+    case "$potcar_archive" in
+        *pot.tar.gz|*pot.tgz|*pot.zip)
+            if [ -d "pot" ]; then
+                mv pot/* potcar/
+                rmdir pot
+            elif [ -d "potcar/pot" ]; then
+                mv potcar/pot/* potcar/
+                rmdir potcar/pot
+            fi
             ;;
     esac
     
