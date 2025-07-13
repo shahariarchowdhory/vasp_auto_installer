@@ -9,6 +9,9 @@ BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 BOLD='\033[1m'
 NC='\033[0m'
+MAGENTA='\033[1;35m'
+GOLD='\033[38;5;220m'
+
 
 log() { echo -e "${BLUE}[INFO]${NC} $1"; }
 log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
@@ -16,16 +19,14 @@ log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
 log_cyan() { echo -e "${CYAN}$1${NC}"; }
 
+
 display_header() {
     local delay=0.05
-
     slow_echo() {
         echo -e "$1"
         sleep "$delay"
     }
-
     echo -e
-
     slow_echo "${YELLOW} █████   █████   █████████    █████████  ███████████ ${NC}"
     slow_echo "${YELLOW}░░███   ░░███   ███░░░░░███  ███░░░░░███░░███░░░░░███${NC}"
     slow_echo "${YELLOW} ░███    ░███  ░███    ░███ ░███    ░░░  ░███    ░███${NC}"
@@ -46,17 +47,15 @@ display_header() {
     slow_echo "${YELLOW}█████   █████ ░░████████      █████    ░░░███████░  ${NC}"
     slow_echo "${YELLOW}░░░░░   ░░░░░   ░░░░░░░░      ░░░░░       ░░░░░░░   ${NC}"
     slow_echo ""
-
-    slow_echo "${BOLD}${BLUE}============================================${NC}"
-    slow_echo "${BOLD}${BLUE}        VASP Installation Script v1.1       ${NC}"
-    slow_echo "${BOLD}${BLUE}============================================${NC}"
-    slow_echo "${CYAN}Developer: ${GREEN}Shahariar Chowdhory${NC}"
-    slow_echo "${CYAN}GitHub:    ${GREEN}https://github.com/shahariarchowdhory${NC}"
-    slow_echo "${BLUE}============================================${NC}"
+    slow_echo "${BOLD}${GOLD}======================================================${NC}"
+    slow_echo "${BOLD}${GOLD}             VASP Installation Script v1.1            ${NC}"
+           slow_echo "${GOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━ o ━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    slow_echo "${BOLD}${GOLD}              One Script to Rule Them All             ${NC}"
+    slow_echo "${BOLD}${GOLD}======================================================${NC}"
     slow_echo ""
-
     sleep 2
 }
+
 
 show_instructions() {
     local delay=0.05
@@ -67,7 +66,7 @@ show_instructions() {
     }
 
     slow_echo "${BOLD}${YELLOW}INSTALLATION INSTRUCTIONS${NC}"
-    slow_echo "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    slow_echo "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     slow_echo ""
     slow_echo "${BOLD}Files to place in $HOME directory:${NC}"
     slow_echo "   ${RED}* Required files you MUST provide:${NC}"
@@ -87,7 +86,7 @@ show_instructions() {
     slow_echo "${BOLD}Current status of files in $HOME:${NC}"
     check_file_status
     slow_echo ""
-    slow_echo "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    slow_echo "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     slow_echo ""
 }
 
@@ -205,13 +204,13 @@ check_installation_status() {
 
 show_menu() {
     check_installation_status
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     echo -e
     echo -e "${BOLD}${RED} You are advised to read the top section first before proceeding. ${RED}"
     echo -e
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     echo -e "${BOLD}${YELLOW}Select installation option:${NC}"
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     sleep 2
 
     
@@ -265,14 +264,14 @@ show_menu() {
     fi
     
     echo "5) Exit"
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     echo
     read -p "Enter your choice (0-5): " choice
 }
 
 show_vasp_warning_menu() {
     echo -e "${BOLD}${RED}DEPENDENCY WARNING${NC}"
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     echo -e "${YELLOW}VASP compilation requires Intel OneAPI components:${NC}"
     echo -e "   ${RED}* Intel Base Kit: NOT INSTALLED${NC}"
     echo -e "   ${RED}* Intel HPC Kit: NOT INSTALLED${NC}"
@@ -283,7 +282,7 @@ show_vasp_warning_menu() {
     echo "1) Install Intel OneAPI first, then VASP (Recommended)"
     echo "2) Proceed anyway (NOT RECOMMENDED)"
     echo "3) Return to main menu"
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     echo
     read -p "Enter your choice (1-3): " warning_choice
 }
@@ -291,7 +290,7 @@ show_vasp_warning_menu() {
 confirm_reinstall() {
     local component="$1"
     echo -e "${BOLD}${YELLOW}REINSTALL CONFIRMATION${NC}"
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     echo -e "${YELLOW}$component is already installed.${NC}"
     echo -e "${BOLD}This will:${NC}"
     echo -e "   ${RED}* Remove existing installation${NC}"
@@ -300,7 +299,7 @@ confirm_reinstall() {
     echo -e "${BOLD}Do you want to proceed with reinstallation?${NC}"
     echo "1) Yes, reinstall"
     echo "2) No, skip"
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     echo
     read -p "Enter your choice (1-2): " reinstall_choice
     
@@ -1177,7 +1176,7 @@ main() {
     
     echo
     echo -e "${BOLD}${GREEN}Installation completed successfully!${NC}"
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     echo -e "${YELLOW}Next steps:${NC}"
     echo -e "   1. Restart your terminal or run: ${CYAN}source ~/.bashrc${NC}"
     echo -e "   2. Verify installations:"
@@ -1190,7 +1189,24 @@ main() {
     if $VASP_INSTALLED || [ "$choice" = "0" ] || [ "$choice" = "2" ] || [ "$choice" = "3" ]; then
         echo -e "     - VASP: ${CYAN}vasp_std --help${NC}"
     fi
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    sleep 0.5
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    sleep 0.5
+    echo
+    echo -e "${CYAN}Developer: ${GREEN}Shahariar Chowdhory${NC}"
+    sleep 0.5
+    echo -e "${CYAN}GitHub:    ${GREEN}https://github.com/shahariarchowdhory${NC}"
+    sleep 0.5
+    echo
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    sleep 0.5
+    echo -e "${CYAN}If you encounter any issues, please report them on GitHub.${NC}"
+    echo -e "${CYAN}Make sure to include relevant logs and error messages.${NC}"
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${BOLD}${GREEN}Thank you for using the VASP Auto Installer!${NC}"
+    echo -e "${BOLD}${YELLOW}If you found this tool helpful, please consider starring it on GitHub!${NC}"
+    echo -e "${BOLD}${GREEN}Happy VASP computing!${NC}"
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 }
 
 main "$@"
