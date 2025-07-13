@@ -9,7 +9,7 @@
 ### Step 1: Prepare Required Files
 Place these files in your `$HOME` directory:
 - **VASP source archive**: `Vasp.6.X.X.zip` or `Vasp.6.X.X.tar.gz`
-- **POTCAR archive**: `potcar.zip` or `potcar.tar.gz`
+- **POTCAR archive**: `potcar.zip` or `potcar.tar.gz` or `potcar.tgz` or `pot.zip` or `pot.tar.gz` or `pot.tgz`
 
 ### Step 2: Download and Run
 ```bash
