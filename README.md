@@ -17,6 +17,19 @@ chmod +x vasp_auto_installer.sh
 * ⚠️ Don't run it as root - it'll ask for sudo only when needed.
 * ⭐ Don't forget to star if it helped you!
 
+## ⚙️ Installation Options
+
+The script will present an interactive menu:
+
+0) Install All Components
+1) Intel OneAPI (Base Kit + HPC Kit)
+2) VASPKit + VASP
+3) VASP only
+4) VASPKit only
+5) Exit
+
+Select the desired option to proceed with the installation.
+
 ## ✨ Functionality
 
 This script performs the following:
@@ -92,21 +105,8 @@ This script performs the following:
    chmod +x vasp_auto_installer.sh
    ./vasp_auto_installer.sh
    ```
+
   
-
-
-## ⚙️ Installation Options
-
-The script will present an interactive menu:
-
-0) Install All Components
-1) Intel OneAPI (Base Kit + HPC Kit)
-2) VASPKit + VASP
-3) VASP only
-4) VASPKit only
-5) Exit
-
-Select the desired option to proceed with the installation.
 
 ## ✅ Post-Installation
 
