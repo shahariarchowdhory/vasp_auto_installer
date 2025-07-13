@@ -16,8 +16,7 @@ chmod +x vasp_auto_installer.sh
 *  The script will guide you through Intel OneAPI, VASP, and VASPKit installation via a menu.
 *  Select 0 (Zero) from the menu to fresh install everything.
 *  Close and reopen the terminal after the installation is complete.
-*  Don't run it as root - it'll ask for sudo only when needed.
-*  Don't forget to star if it helped you!
+* And that's it. You now have VASP installed on your system. 
 
 ## ⚙️ Installation Options
 
