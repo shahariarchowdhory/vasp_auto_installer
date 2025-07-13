@@ -1,150 +1,141 @@
-# VASP Installation Script
+# VASP Auto Installer
 
-## 🚀 Overview
+**Automated installation of VASP, Intel OneAPI, and VASPKit for Linux/WSL systems**
 
-This script automates the installation of VASP, Intel OneAPI (Base Kit + HPC Kit), and VASPKit. It handles dependency resolution, package downloads, VASP compilation with Intel compilers, and environment configuration.
+---
 
-# **TL;DR — Just Copy, Paste, and Run**
+## Quick Start
 
-1. **Prepare Files** Make sure the VASP source archive (e.g. `Vasp.6.X.X.zip` or `Vasp.6.X.X.tar.gz`) and the POTCAR archive (`potcar.zip` or `potcar.tar.gz`) are placed in your `$HOME` directory on your Linux or WSL system.
+### Step 1: Prepare Required Files
+Place these files in your `$HOME` directory:
+- **VASP source archive**: `Vasp.6.X.X.zip` or `Vasp.6.X.X.tar.gz`
+- **POTCAR archive**: `potcar.zip` or `potcar.tar.gz`
 
-2. **Run the Installer Script** Open your terminal and run the following commands:
-
+### Step 2: Download and Run
 ```bash
 wget https://raw.githubusercontent.com/shahariarchowdhory/vasp_auto_installer/refs/heads/main/vasp_auto_installer.sh -O vasp_auto_installer.sh
 chmod +x vasp_auto_installer.sh
 ./vasp_auto_installer.sh
 ```
 
-3. **Follow the Prompts** The script will guide you through installing Intel OneAPI, VASP, and VASPKit via a simple menu.
+### Step 3: Install
+1. Choose option `0` (Install All Components) from the menu
+2. Follow the prompts
+3. Restart your terminal when complete
 
-4. **Select Fresh Install** Choose option `0` (zero) in the menu to perform a fresh installation of everything.
+---
 
-5. **Restart Your Terminal** Once the installation is finished, close your terminal and open it again.
+## What This Script Does
+1. **System Preparation**: Checks and installs required system packages
+2. **Intel OneAPI**: Downloads installers (`base.sh`, `hpc.sh`) and installs compiler suite
+3. **POTCAR Setup**: Extracts and organizes POTCAR files to `~/potcar`
+4. **VASP Compilation**: 
+   - Extracts source to `~/vasp_src`
+   - Generates optimized `makefile.include` for Intel compilers
+   - Compiles VASP executables
+   - Copies binaries to `~/bin`
+5. **VASPKit Setup**: Downloads, extracts, and configures VASPKit
+6. **Environment**: Updates `~/.bashrc` with necessary paths and source commands
 
-6. **All Done!** VASP should now be installed and ready to use on your system.
+---
 
-## ⚙️ Installation Options
+## Installation Options
 
-The script will present an interactive menu:
+The script provides an interactive menu:
 
-0) Install All Components
-1) Intel OneAPI (Base Kit + HPC Kit)
-2) VASPKit + VASP
-3) VASP only
-4) VASPKit only
-5) Exit
+| Option | Description |
+|--------|-------------|
+| `0` | **Install All Components** (Recommended for first-time users) |
+| `1` | Intel OneAPI (Base Kit + HPC Kit) only |
+| `2` | VASPKit + VASP only |
+| `3` | VASP only |
+| `4` | VASPKit only |
+| `5` | Exit |
 
-Select the desired option to proceed with the installation.
+---
 
-## ✨ Functionality
+## System Requirements
 
-This script performs the following:
+### Supported Systems
+- **Linux**: Debian/Ubuntu, RHEL/CentOS based distributions
+- **WSL**: Windows Subsystem for Linux
+- **Shell**: bash
 
-* **System Dependency Check and Installation:** Checks for and installs `make`, `gcc`, `g++`, `gfortran`, `unzip`, `tar`, `wget`, `curl`, and `python3`.
-* **Intel OneAPI Management:** Finds or downloads Intel Base Kit and HPC Kit installers (`base.sh`, `hpc.sh`) and installs them.
-* **VASPKit Management:** Finds or downloads a VASPKit archive, extracts it, creates a `~/bin/vaspkit` symlink, and sets up the `.vaspkit` configuration.
-* **POTCAR Setup:** Locates the provided POTCAR archive, extracts it to `~/potcar`, and organizes its contents.
-* **VASP Compilation and Installation:** Finds the VASP source archive, extracts it to `~/vasp_src`, generates a `makefile.include` for Intel compilers/MKL, compiles VASP, and copies executables to `~/bin`.
-* **Environment Configuration:** Adds necessary `source` commands and `PATH` modifications to `~/.bashrc`.
-* **Interactive User Interface:** Provides a menu to select components for installation and handles reinstallation confirmations.
+### Required Files (in `$HOME`)
+- ✅ **VASP source**: `vasp.*.tar.gz` or `vasp.*.zip`
+- ✅ **POTCAR archive**: `potcar.tar.gz` or `potcar.zip`
 
-## 📋 Prerequisites
+### Optional Files (auto-downloaded if missing)
+- Intel Base Kit installer: `base.sh`
+- Intel HPC Kit installer: `hpc.sh`
+- VASPKit archive: `vaspkit.zip` or `vaspkit.tar.gz`
 
-* Linux OS (Debian/Ubuntu or RHEL/CentOS based).
+---
 
-* bash shell.
+## Post-Installation
 
-* **Required in $HOME:**
-
-  * VASP source archive (vasp.*.tar.gz or vasp.*.zip).
-
-  * POTCAR archive (potcar.tar.gz or potcar.zip).
-
-* **Optional Files (in $HOME or auto-downloaded)**
-
-  * base.sh (Intel Base Kit installer)
-
-  * hpc.sh (Intel HPC Kit installer)
-
-  * vaspkit.zip or vaspkit.tar.gz (VASPKit archive)
-
-**Download URLs for Optional Files:**
-
-* Intel Base Kit: https://archive.org/download/base_2023/base.sh
-
-* Intel HPC Kit: https://archive.org/download/hpc_2023/hpc.sh
-
-* VASPKit: https://archive.org/download/vaspkit151.tar/vaspkit.1.5.1.linux.x64.tar.gz
-
-## ⬇️ Download & Prepare Script
-
-1. **Download:**
-
-   
+### Reload Your Environment
 ```bash
-   wget https://raw.githubusercontent.com/shahariarchowdhory/vasp_auto_installer/refs/heads/main/vasp_auto_installer.sh -O vasp_auto_installer.sh
+source ~/.bashrc
 ```
 
-2. **Make Executable:**
+### Verify Installation
+Test that everything is working:
 
-   
 ```bash
-   chmod +x vasp_auto_installer.sh
-```
-## 🚀 Usage
+# Check Intel compilers
+which ifort
 
-1. **Place Archives:** Ensure VASP source and POTCAR archives are in your $HOME directory.
+# Test VASPKit
+vaspkit -h
 
-2. **Run Script:**
-
-   
-```bash
-   ./vasp_auto_installer.sh
+# Test VASP
+vasp_std --help
 ```
 
-   *(Do not run as root; sudo will be prompted when required for system-wide operations.)*
+---
 
- ## Or just copy and paste
+## Troubleshooting
 
-   ```bash
-   wget https://raw.githubusercontent.com/shahariarchowdhory/vasp_auto_installer/refs/heads/main/vasp_auto_installer.sh -O vasp_auto_installer.sh
-   chmod +x vasp_auto_installer.sh
-   ./vasp_auto_installer.sh
-   ```
+### Common Issues
+- **Permission errors**: Don't run as root; the script will prompt for sudo when needed
+- **Missing files**: Ensure VASP and POTCAR archives are in your `$HOME` directory
+- **Path issues**: Restart your terminal or run `source ~/.bashrc`
 
-  
+### File Locations After Installation
+- **VASP executables**: `~/bin/`
+- **VASP source**: `~/vasp_src/`
+- **POTCAR files**: `~/potcar/`
+- **VASPKit**: `~/bin/vaspkit` (symlink)
 
-## ✅ Post-Installation
+---
 
-1. **Reload Shell:**
+## License Information
 
-   
-bash
-   source ~/.bashrc
+| Software | License Type | Requirements |
+|----------|--------------|--------------|
+| **Intel oneAPI** | Free | Intel Simplified Software License |
+| **VASP** | Commercial | License required from [vasp.at](https://www.vasp.at/) |
+| **POTCAR** | Restricted | Valid VASP license required |
+| **VASPKit** | Free | Academic/non-commercial use only |
+| **This installer** | Open Source | MIT License |
 
+**⚠️ Important**: Users must ensure compliance with all applicable licenses, especially for VASP and POTCAR files.
 
-2. **Verify Installations:**
+---
 
-   * **Intel OneAPI:** which ifort
+## Credits
 
-   * **VASPKit:** vaspkit -h
+**Developer**: Shahariar Chowdhory  
+**GitHub**: [https://github.com/shahariarchowdhory](https://github.com/shahariarchowdhory)
 
-   * **VASP:** vasp_std --help
+*If this installer helped you, please consider starring the repository!*
 
+---
 
-## License
+## Need Help?
 
-- **Intel oneAPI**: Free (Intel Simplified Software License)
-- **VASP**: Commercial license required from [vasp.at](https://www.vasp.at/)
-- **POTCAR**: Requires valid VASP license
-- **VASPKit**: Free for academic/non-commercial use
-- **This installer**: Open source
-
-**Note**: Users must ensure compliance with all applicable licenses.
-
-## 👨‍💻 Developer
-
-**Shahariar Chowdhory**
-GitHub: [https://github.com/shahariarchowdhory](https://github.com/shahariarchowdhory)
-(Don't forget to star the repo if it helped you)
+1. **Check the logs**: The script provides detailed output during installation
+2. **Verify prerequisites**: Ensure all required files are in place
+3. **Visit the repository**: Check for updates and known issues
+4. **Environment**: Make sure to restart your terminal after installation
