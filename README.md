@@ -132,6 +132,17 @@ bash
 
    * **VASP:** vasp_std --help
 
+
+## License
+
+- **Intel oneAPI**: Free (Intel Simplified Software License)
+- **VASP**: Commercial license required from [vasp.at](https://www.vasp.at/)
+- **POTCAR**: Requires valid VASP license
+- **VASPKit**: Free for academic/non-commercial use
+- **This installer**: Open source
+
+**Note**: Users must ensure compliance with all applicable licenses.
+
 ## 👨‍💻 Developer
 
 **Shahariar Chowdhory**
