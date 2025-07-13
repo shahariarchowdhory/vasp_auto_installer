@@ -4,7 +4,7 @@
 
 This script automates the installation of VASP, Intel OneAPI (Base Kit + HPC Kit), and VASPKit. It handles dependency resolution, package downloads, VASP compilation with Intel compilers, and environment configuration.
 
-## **TL;DR — Just Copy, Paste, and Run**
+# **TL;DR — Just Copy, Paste, and Run**
 
 1. **Prepare Files** Make sure the VASP source archive (e.g. `Vasp.6.X.X.zip` or `Vasp.6.X.X.tar.gz`) and the POTCAR archive (`potcar.zip` or `potcar.tar.gz`) are placed in your `$HOME` directory on your Linux or WSL system.
 
