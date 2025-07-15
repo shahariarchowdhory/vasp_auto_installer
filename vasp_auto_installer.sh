@@ -882,7 +882,7 @@ find_vasp_archive() {
     cd "$HOME"
     
     vasp_archive=""
-    for file in $(find . -maxdepth 1 \( -name "vasp*" -o -name "VASP*" \) \( -name "*.zip" -o -name "*.tar.gz" -o -name "*.tgz" \) 2>/dev/null); do
+    for file in $(find . -maxdepth 1 \( -name "vasp.6*" -o -name "VASP.6*" \) \( -name "*.zip" -o -name "*.tar.gz" -o -name "*.tgz" \) 2>/dev/null); do
         vasp_archive="$file"
         break
     done
