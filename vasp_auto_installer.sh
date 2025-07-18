@@ -48,7 +48,7 @@ display_header() {
     slow_echo "${YELLOW}░░░░░   ░░░░░   ░░░░░░░░      ░░░░░       ░░░░░░░   ${NC}"
     slow_echo ""
     slow_echo "${BOLD}${GOLD}======================================================${NC}"
-    slow_echo "${BOLD}${GOLD}             VASP Installation Script v1.1            ${NC}"
+    slow_echo "${BOLD}${GOLD}             VASP Installation Script v1.2            ${NC}"
            slow_echo "${GOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━ o ━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     slow_echo "${BOLD}${GOLD}              One Script to Rule Them All             ${NC}"
     slow_echo "${BOLD}${GOLD}======================================================${NC}"
