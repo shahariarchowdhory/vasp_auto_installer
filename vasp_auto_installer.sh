@@ -515,7 +515,7 @@ install_intel_kits() {
                 case $choice in
                     1)
                         rm -f hpc.sh
-                        find_or_download_intel_hpc
+                        find_or_download_intel
                         ;;
                     2)
                         echo "Please place the correct hpc.sh in your home directory and press Enter to continue."
@@ -571,7 +571,7 @@ install_intel_kits() {
                 case $choice in
                     1)
                         rm -f base.sh
-                        find_or_download_intel_base
+                        find_or_download_intel
                         ;;
                     2)
                         echo "Please place the correct base.sh in your home directory and press Enter to continue."
